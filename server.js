@@ -25,7 +25,7 @@ const upload = multer({ storage });
 router.post('/save', upload.single('file'), (req, res) => {
   const file = req.file;
   const meta = req.body;
-  data = fs.readFileSync(`./files/${file.filename}`);
+  const data = fs.readFileSync(`./files/${file.filename}`);
   const doc = {
     _attachments: {
       blob: {

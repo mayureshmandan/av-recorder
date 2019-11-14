@@ -1,3 +1,2 @@
-## Recorder
-
-Record audio/video and send it to server
+# Recorder
+Record audio/video from microphone/webcam
