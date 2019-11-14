@@ -31,7 +31,9 @@ function App() {
         <div className="Home">
           <header className="App-header">
             <nav>
+              {/*eslint-disable-next-line */}
               <span><a className="Header-Link" href="/"><span className={window.location.pathname == '/' ? "Header-Tab active" : "Header-Tab"}>Record</span></a></span>
+              {/* eslint-disable-next-line */}
               <span><a className="Header-Link" href="saved" ><span className={window.location.pathname == '/' ? "Header-Tab" : "Header-Tab active"}>Saved Records</span></a></span>
             </nav>
           </header>

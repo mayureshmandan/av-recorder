@@ -4,13 +4,18 @@ import { connect } from 'react-redux';
 import { saveBlob } from './actions';
 import { saveBlobApi } from './api';
 import videoLogo from './video.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSpinner
+} from '@fortawesome/free-solid-svg-icons';
 
 class VideoRecorder extends Component {
   constructor(props) {
     super(props);
     this.state = {
       recorder: null,
-      video: null
+      video: null,
+      recording: false
     };
 
     this.record = this.record.bind(this);
@@ -28,24 +33,25 @@ class VideoRecorder extends Component {
         const video = await recorder.stop();
         this.setState({ recorder: null, video });
       } else {
-        const recorder = await record({audio: true, video: true});
+        const recorder = await record({audio: true, video: true, recording: false });
         this.setState({ recorder });
         console.log(recorder);
         if (recorder) {
           recorder.start();
+          this.setState({ recording: true });
           setTimeout(async () => {
             if (this.state.recorder) {
               const video = await this.state.recorder.stop();
-              this.setState({ recorder: null, video });
+              this.setState({ recorder: null, video, recording: false });
             }
-          }, 10400);
+          }, 10900);
         }
       }
     })();
   }
 
   playVideo() {
-    console.log('Playing recorded audio');
+    console.log('Playing recorded video');
     const { video } =  this.state;
     const player = document.getElementById('player');
     if (video) {
@@ -78,14 +84,24 @@ class VideoRecorder extends Component {
             {this.state.recorder ? 'Stop' : 'Start'}
           </button>
         </div>
+        <br />
+        <br />
         <div>
         {this.state.video ?
           <video width="320" height="200" id="player" controls onPlay={this.playVideo}>
             <source src={this.state.video.url} />
             Your browser does not support the video element.
-          </video> : "No video recorded yet"
+          </video> : <div>
+            {this.state.recording ? <div>
+              <FontAwesomeIcon icon={faSpinner} spin />
+            </div> : <div>
+              No video recorded yet
+            </div>}
+            </div>
         }
         </div>
+        <br />
+        <br />
         <div>
           <button onClick={this.save}>Save video</button>
         </div>

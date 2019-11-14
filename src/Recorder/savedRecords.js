@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faTrashAlt
+  faTrashAlt,
+  faSpinner
 } from '@fortawesome/free-solid-svg-icons';
 import { fetchBlobsApi, deleteBlobApi } from './api';
 import styles from './recorder.css';
@@ -10,6 +11,7 @@ import { convertURIToBinary } from './helpers';
 
 class Player extends Component {
   render() {
+    // eslint-disable-next-line
     if (this.props.meta.type == 'audio') {
       let binary = convertURIToBinary(this.props._attachments.blob.data);
       let blob = new Blob([binary], {
@@ -42,7 +44,8 @@ class SavedRecords extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      blobs: []
+      blobs: [],
+      loading: true
     };
     this.getBlobs = this.getBlobs.bind(this);
   }
@@ -52,10 +55,11 @@ class SavedRecords extends Component {
   }
 
   getBlobs() {
-    console.log('getting blobs');
+    this.setState({ loading: true });
     fetchBlobsApi().then((response) => {
       this.setState({ blobs: response.data });
       console.log("fetched blobs:", this.state.blobs);
+      this.setState({ loading: false });
     })
   }
 
@@ -73,6 +77,7 @@ class SavedRecords extends Component {
       return (
         <div key={index} className={styles.card}>
           <Player {...item} />
+           {/* eslint-disable-next-line */}
           <div>{index+1}) {item.meta.type == 'audio'? "Audio":"Video"} {item._id} &nbsp;&nbsp;<FontAwesomeIcon icon={faTrashAlt} color="#B53737" onClick={()=>this.deleteBlob(item._id)} /></div>
           <br />
           <br />
@@ -83,7 +88,11 @@ class SavedRecords extends Component {
     return (
       <div>
         <h2>Saved Records</h2>
-        {savedRecords}
+        {this.state.loading ? <div>
+          <FontAwesomeIcon icon={faSpinner} spin />
+        </div> : <div>
+          {savedRecords}
+        </div>}
       </div>
     )
   }

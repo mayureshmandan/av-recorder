@@ -4,13 +4,18 @@ import { connect } from 'react-redux';
 import { saveBlob } from './actions';
 import { saveBlobApi } from './api';
 import audioLogo from './audio.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSpinner
+} from '@fortawesome/free-solid-svg-icons';
 
 class AudioRecorder extends Component {
   constructor(props) {
     super(props);
     this.state = {
       recorder: null,
-      audio: null
+      audio: null,
+      recording: false
     };
 
     this.record = this.record.bind(this);
@@ -26,18 +31,19 @@ class AudioRecorder extends Component {
     (async () => {
       if (recorder) {
         const audio = await recorder.stop();
-        this.setState({ recorder: null, audio });
+        this.setState({ recorder: null, audio, recording: false });
       } else {
         const recorder = await record({audio: true});
         this.setState({ recorder });
         if (recorder) {
           recorder.start();
+          this.setState({ recording: true });
           setTimeout(async () => {
             if (this.state.recorder) {
               const audio = await this.state.recorder.stop();
-              this.setState({ recorder: null, audio });
+              this.setState({ recorder: null, audio, recording: false });
             }
-          }, 10400);
+          }, 10900);
         }
       }
     })();
@@ -78,15 +84,25 @@ class AudioRecorder extends Component {
             {this.state.recorder ? 'Stop' : 'Start'}
           </button>
         </div>
+        <br />
+        <br />
         <div>
           {/* <button onClick={this.playAudio}>Play recorded audio</button> */}
           {this.state.audio ? 
             <audio controls width="320" height="40">
               <source src={this.state.audio.url} type="audio/webm" />
               Your browser does not support the audio element.
-            </audio>  : "No audio recorded yet"
+            </audio>  : <div>
+            {this.state.recording ? <div>
+              <FontAwesomeIcon icon={faSpinner} spin />
+            </div> : <div>
+              No audio recorded yet
+            </div>}
+            </div>
         }
         </div>
+        <br />
+        <br />
         <div>
           <button onClick={this.save}>Save audio</button>
         </div>
