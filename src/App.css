@@ -1,0 +1,41 @@
+.App {
+  text-align: center;
+}
+
+.recorder-logo {
+  height: 16vmin;
+}
+
+.App-header {
+  background-color: #393c44;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  justify-content: center;
+  font-size: calc(14px + 2vmin);
+  color: white;
+  margin-bottom: 12vh;
+  padding: 0;
+  padding-left: 20vh;
+  text-transform: uppercase;
+}
+
+.Header-Link {
+  text-decoration: none;
+  color: white!important;
+}
+
+.Header-Tab {
+  padding: 10px;
+  margin: 0;
+  margin-right: 5vh
+}
+
+.active {
+  border-bottom: 5px solid white;
+}
+
+.App-link {
+  color: #09d3ac;
+}
